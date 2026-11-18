@@ -9,89 +9,121 @@
 :root{--bg:#0f1b3d;--bg2:#1d2f6b;--card:#182654;--gold:#ffd37a;--rose:#ff7a9a;--text:#fff7ea}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;user-select:none}
-body{background:radial-gradient(ellipse at 50% 0%,var(--bg2),var(--bg) 70%) fixed;color:var(--text);font-family:"Hind Siliguri",system-ui,sans-serif;text-align:center;padding:24px 16px 50px;touch-action:manipulation}
-main{max-width:460px;margin:0 auto;min-height:82vh;display:flex;flex-direction:column;justify-content:center}
+body{background:radial-gradient(ellipse at 50% 0%,var(--bg2),var(--bg) 70%) fixed;color:var(--text);font-family:"Hind Siliguri",system-ui,sans-serif;text-align:center;padding:24px 16px 50px;touch-action:manipulation;overflow-x:hidden}
+main{max-width:460px;margin:0 auto;min-height:82vh;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
 h1{font-family:Pacifico,cursive;font-weight:400;font-size:clamp(1.5rem,6.5vw,2.2rem);color:var(--gold);margin:10px 0;line-height:1.4}
 p{line-height:1.6;margin:6px auto;font-size:1.05rem}
 .msg-box{background:rgba(255,122,154,.12);border-left:3px solid var(--rose);padding:10px 14px;border-radius:10px;font-size:.95rem;color:#ffd9e2;margin:10px auto 14px;font-style:italic}
 .dots{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
 .dots i{width:9px;height:9px;border-radius:50%;background:#3b4e92;transition:.3s}
 .dots i.on{background:var(--gold);transform:scale(1.2)}
-.step{display:none;animation:in .4s}
+.step{display:none;animation:in .4s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
 .step.show{display:block}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border-radius:18px;padding:18px;margin:14px 0;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+@keyframes in{from{opacity:0;transform:scale(0.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.card{background:var(--card);border-radius:18px;padding:18px;margin:14px 0;text-align:left;box-shadow:0 10px 30px rgba(0,0,0,.3);border:1px solid rgba(255,211,122,.15)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:2px solid #3b4e92;background:transparent;color:var(--text);border-radius:999px;padding:8px 14px;font:inherit;font-size:.95rem;cursor:pointer;transition:.15s}
-.chip[aria-pressed="true"]{background:var(--rose);border-color:var(--rose);color:#3a0f26;font-weight:700;transform:scale(1.04)}
+.chip{border:2px solid #3b4e92;background:transparent;color:var(--text);border-radius:999px;padding:8px 14px;font:inherit;font-size:.95rem;cursor:pointer;transition:.2s}
+.chip[aria-pressed="true"]{background:var(--rose);border-color:var(--rose);color:#3a0f26;font-weight:700;transform:scale(1.06)}
 
-/* Quiz Question Cards */
+/* Quiz & Choice Buttons */
 .quiz-options{display:flex;flex-direction:column;gap:10px;margin-top:12px}
 .quiz-btn{background:#0f1b3d;border:2px solid #3b4e92;color:var(--text);padding:12px 16px;border-radius:12px;font:inherit;font-size:1rem;cursor:pointer;text-align:left;transition:.2s}
-.quiz-btn:hover{border-color:var(--gold);background:#162452}
+.quiz-btn:hover{border-color:var(--gold);background:#162452;transform:translateX(4px)}
 
 input,textarea,select{width:100%;font:inherit;color:var(--text);background:#0f1b3d;border:2px solid #3b4e92;border-radius:12px;padding:11px;margin-top:10px}
 input[type=date]{color-scheme:dark}
 .chip:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-button.b{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 24px;font-size:1.05rem;cursor:pointer}
+button.b{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 24px;font-size:1.05rem;cursor:pointer;transition:transform .15s}
+button.b:active{transform:scale(0.96)}
 .main{background:var(--gold);color:#2b1b00;box-shadow:0 4px 15px rgba(255,211,122,.3)}
 .main:disabled{opacity:.6}
 .ghost{background:transparent;color:var(--text);border:2px solid #3b4e92!important}
 .nav{display:flex;gap:10px;justify-content:center;margin-top:8px}
 .nav .main{flex:1}
 .err{color:var(--rose);min-height:1.5em;margin:8px 0;font-weight:600}
-#yes{font-size:1.25rem;padding:16px 38px;margin-top:20px;transition:transform .2s}
-#no{background:transparent;color:var(--text);border:2px solid var(--rose)!important;position:fixed;left:62%;top:74%;transform:translate(-50%,-50%);transition:left .22s,top .22s;z-index:5}
-.big{font-size:4.2rem;margin:8px 0}
+
+/* Yes / No Specific Buttons */
+.btn-group{display:flex;gap:15px;justify-content:center;margin-top:24px;align-items:center}
+.yes-btn{background:var(--gold);color:#2b1b00;font-size:1.2rem;padding:16px 36px;border-radius:14px;font-weight:700;border:0;cursor:pointer;box-shadow:0 4px 15px rgba(255,211,122,.3);transition:transform .2s}
+.no-btn{background:transparent;color:var(--text);border:2px solid var(--rose)!important;font-size:1.2rem;padding:16px 36px;border-radius:14px;font-weight:700;cursor:pointer;position:fixed;transition:left .22s,top .22s;z-index:5}
+
+.big{font-size:3.8rem;margin:4px 0;animation:bounce 2s infinite ease-in-out}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 canvas#c{position:fixed;inset:0;pointer-events:none;z-index:9}
 
 /* Mini Game Styles */
-#gameArea{position:relative;width:100%;height:290px;background:linear-gradient(180deg,#0b142e,#162452);border:2px solid var(--gold);border-radius:18px;overflow:hidden;margin:12px 0;cursor:pointer}
+#gameArea{position:relative;width:100%;height:290px;background:linear-gradient(180deg,#0b142e,#162452);border:2px solid var(--gold);border-radius:18px;overflow:hidden;margin:12px 0;cursor:pointer;box-shadow:inset 0 0 15px rgba(0,0,0,.5)}
 .falling-item{position:absolute;font-size:2.2rem;cursor:pointer;user-select:none;animation:pop .2s ease-out;padding:6px}
 @keyframes pop{from{transform:scale(0.5)}to{transform:scale(1)}}
 .score-pill{display:inline-block;background:var(--rose);color:#3a0f26;font-weight:700;padding:4px 14px;border-radius:99px;font-size:1rem;margin-bottom:6px}
+
+/* Floating Cute Background Elements */
+.floating-bg{position:absolute;font-size:1.5rem;opacity:0.15;animation:floatBg 8s infinite linear;z-index:1}
+@keyframes floatBg{0%{transform:translateY(105vh) rotate(0deg);opacity:0}50%{opacity:0.3}100%{transform:translateY(-10vh) rotate(360deg);opacity:0}}
 </style>
 </head>
 <body>
+<!-- Background Floating Cute Elements -->
+<div class="floating-bg" style="left:10%;animation-duration:7s">🧸</div>
+<div class="floating-bg" style="left:30%;animation-duration:9s">🎀</div>
+<div class="floating-bg" style="left:50%;animation-duration:6s">💖</div>
+<div class="floating-bg" style="left:70%;animation-duration:10s">🧸</div>
+<div class="floating-bg" style="left:90%;animation-duration:8s">🎀</div>
+
 <main>
   <div class="dots" id="dots" aria-hidden="true"></div>
 
-  <!-- 0: Jabe to? -->
+  <!-- 0: Missing & Desire Page -->
   <section class="step" data-s="0">
-    <div class="big">💌</div>
+    <div class="big">🥺💕</div>
+    <h1 style="font-size:clamp(1.3rem,5.5vw,1.9rem); line-height:1.5;">তোমাকে অনেক দিন দেখি না... অনেক দিনগুলো মনে হচ্ছে কয়েক ইয়ারের সমান... তোমাকে দেখতে ইচ্ছে করছে অনেক... তোমার ও কি আমাকে দেখতে ইচ্ছে করছে?</h1>
+    <div class="btn-group">
+      <button class="yes-btn" onclick="nextStep(1)">হ্যাঁ, খুব! 🥰</button>
+      <button class="no-btn" id="no1">না 😜</button>
+    </div>
+  </section>
+
+  <!-- 1: Date Ask Page -->
+  <section class="step" data-s="1">
+    <div class="big">💌🧸</div>
     <h1 id="ask"></h1>
     <p id="sub"></p>
     <div class="msg-box" id="introMsg"></div>
-    <button class="b main" id="yes">Ha, jabo! 🥰</button>
+    <div class="btn-group" style="margin-top:15px">
+      <button class="yes-btn" id="yesDate" onclick="nextStep(2)">Ha, jabo! 🥰</button>
+      <button class="no-btn" id="no2">না 😜</button>
+    </div>
   </section>
-  <button class="b" id="no" style="display:none">Na</button>
 
-  <!-- 1: Quiz Q1 -->
-  <section class="step" data-s="1">
+  <!-- 2: Quiz Q1 -->
+  <section class="step" data-s="2">
+    <div style="font-size:2.5rem;margin-bottom:-5px">🎀</div>
     <h1>Question 1 ✨</h1>
     <p>Tmi dekhte kmn?</p>
     <div class="quiz-options">
-      <button class="quiz-btn" onclick="nextQuiz(2)">A) Porir moto 🧚‍♀️</button>
-      <button class="quiz-btn" onclick="nextQuiz(2)">B) Putul er moto 🎎</button>
-      <button class="quiz-btn" onclick="nextQuiz(2)">C) Reon er boww er moto 💍</button>
-      <button class="quiz-btn" onclick="nextQuiz(2)" style="border-color:var(--gold)">D) Sob gulo! 😍</button>
+      <button class="quiz-btn" onclick="nextStep(3)">A) Porir moto 🧚‍♀️</button>
+      <button class="quiz-btn" onclick="nextStep(3)">B) Putul er moto 🎎</button>
+      <button class="quiz-btn" onclick="nextStep(3)">C) Reon er boww er moto 💍</button>
+      <button class="quiz-btn" onclick="nextStep(3)" style="border-color:var(--gold)">D) Sob gulo! 😍</button>
     </div>
   </section>
 
-  <!-- 2: Quiz Q2 -->
-  <section class="step" data-s="2">
+  <!-- 3: Quiz Q2 -->
+  <section class="step" data-s="3">
+    <div style="font-size:2.5rem;margin-bottom:-5px">🧸</div>
     <h1>Question 2 💖</h1>
     <p>Tmi amk koto ta vlobaso?</p>
     <div class="quiz-options">
-      <button class="quiz-btn" onclick="nextQuiz(3)">A) Infinity ♾️</button>
-      <button class="quiz-btn" onclick="nextQuiz(3)">B) More than Infinity 🚀</button>
-      <button class="quiz-btn" onclick="nextQuiz(3)">C) Universe er soman 🌌</button>
-      <button class="quiz-btn" onclick="nextQuiz(3)" style="border-color:var(--gold)">D) Universe er soman er ceyeo besi! 🥹❤️</button>
+      <button class="quiz-btn" onclick="nextStep(4)">A) Infinity ♾️</button>
+      <button class="quiz-btn" onclick="nextStep(4)">B) More than Infinity 🚀</button>
+      <button class="quiz-btn" onclick="nextStep(4)">C) Universe er soman 🌌</button>
+      <button class="quiz-btn" onclick="nextStep(4)" style="border-color:var(--gold)">D) Universe er soman er ceyeo besi! 🥹❤️</button>
     </div>
   </section>
 
-  <!-- 3: Heart Catching Mini Game -->
-  <section class="step" data-s="3">
+  <!-- 4: Heart Catching Mini Game -->
+  <section class="step" data-s="4">
+    <div style="font-size:2.2rem;margin-bottom:-5px">🧸✨</div>
     <h1>Chotto Game! 🎮</h1>
     <p id="gameSub"></p>
     <div class="score-pill">Score: <span id="score">0</span> / <span id="target">7</span> 💖</div>
@@ -99,9 +131,10 @@ canvas#c{position:fixed;inset:0;pointer-events:none;z-index:9}
     <p style="font-size:.9rem;opacity:.85">Uronto heart (💖) gulote tap kore dhoro! 💣 dhorbe na kintu!</p>
   </section>
 
-  <!-- 4: Kobe -->
-  <section class="step" data-s="4">
-    <h1>Kobe jabe? 📅</h1>
+  <!-- 5: Kobe -->
+  <section class="step" data-s="5">
+    <div style="font-size:2.2rem;margin-bottom:-5px">📅</div>
+    <h1>Kobe jabe? 🗓️</h1>
     <div class="msg-box" id="msgDate"></div>
     <div class="card">
       <input type="date" id="date" aria-label="Tarikh">
@@ -111,9 +144,10 @@ canvas#c{position:fixed;inset:0;pointer-events:none;z-index:9}
     </div>
   </section>
 
-  <!-- 5: Kothay -->
-  <section class="step" data-s="5">
-    <h1>Kothay jabe? 📍</h1>
+  <!-- 6: Kothay -->
+  <section class="step" data-s="6">
+    <div style="font-size:2.2rem;margin-bottom:-5px">📍</div>
+    <h1>Kothay jabe? 🌸</h1>
     <div class="msg-box" id="msgPlace"></div>
     <div class="card">
       <div class="chips" data-key="place" data-multi="0"></div>
@@ -121,9 +155,10 @@ canvas#c{position:fixed;inset:0;pointer-events:none;z-index:9}
     </div>
   </section>
 
-  <!-- 6: Ki khabe -->
-  <section class="step" data-s="6">
-    <h1>Ki khabe? 🥟</h1>
+  <!-- 7: Ki khabe -->
+  <section class="step" data-s="7">
+    <div style="font-size:2.2rem;margin-bottom:-5px">🥟</div>
+    <h1>Ki khabe? 😋</h1>
     <div class="msg-box" id="msgFood"></div>
     <p style="font-size:.9rem;opacity:.85">Ekadhik bachte paro</p>
     <div class="card">
@@ -132,16 +167,17 @@ canvas#c{position:fixed;inset:0;pointer-events:none;z-index:9}
     </div>
   </section>
 
-  <!-- 7: Ar kichu -->
-  <section class="step" data-s="7">
+  <!-- 8: Ar kichu -->
+  <section class="step" data-s="8">
+    <div style="font-size:2.2rem;margin-bottom:-5px">💌</div>
     <h1>Ar kichu bolbe? 💭</h1>
     <div class="msg-box" id="msgExtra"></div>
     <div class="card"><textarea id="extra" rows="4" placeholder="Amar jonno kono message ba wish thakle lekho…"></textarea></div>
   </section>
 
-  <!-- 8: Sesh -->
-  <section class="step" data-s="8">
-    <div class="big">🎉</div>
+  <!-- 9: Sesh -->
+  <section class="step" data-s="9">
+    <div class="big">🧸🎉</div>
     <h1 id="thanks"></h1>
     <p id="thanks2"></p>
     <div class="msg-box" id="finalMsg"></div>
@@ -160,7 +196,7 @@ canvas#c{position:fixed;inset:0;pointer-events:none;z-index:9}
 const CONFIG = {
   ask: "Amar sathe ekta date e jabe? 💞",
   sub: "Ekdom sotti kore bolo! 🥺",
-  introMsg: "“Tomar sathe date e jawar age chotto ekta fun quiz ar game par korte hobe!” ✨",
+  introMsg: "“তোমার সাথে ডেটে যাওয়ার আগে ছোট একটা কুইজ ও ফান গেম পার করতে হবে!” 🧸✨",
   gameSub: "Date unlock korte 7 ta love heart dhoro! 💕",
   msgDate: "“Je din ta tomar sobcheye free ar bhalo lagbe, sei din-i hok amader din.” 🌸",
   msgPlace: "“Jekhanei jai na keno, tumi pashe thaklei jayga ta sundor hoye jabe.” 🥰",
@@ -194,31 +230,87 @@ $("target").textContent = CONFIG.targetScore;
 $("date").min = new Date().toISOString().slice(0,10);
 
 const steps = [...document.querySelectorAll(".step")];
-const LAST_INPUT = 7; // 7 = "Ar kichu" step
+const LAST_INPUT = 8; // 8 = "Ar kichu" step
 let cur = 0;
-steps.forEach((_,i)=>{ if(i<9){ const d=document.createElement("i"); $("dots").appendChild(d);} });
+steps.forEach((_,i)=>{ if(i<10){ const d=document.createElement("i"); $("dots").appendChild(d);} });
 
 function show(n){
   cur = n;
   steps.forEach((s,i)=>s.classList.toggle("show", i===n));
   [...$("dots").children].forEach((d,i)=>d.classList.toggle("on", i<=n));
-  $("no").style.display = n===0 ? "block" : "none";
-  // Step 0 (Start), Steps 1 & 2 (Quiz), Step 3 (Game), Step 8 (End) e nav button thakbe na
-  $("nav").style.display = (n===0 || n===1 || n===2 || n===3 || n===8) ? "none" : "flex";
-  $("back").style.visibility = n===4 ? "hidden" : "visible";
+  
+  // Navigation buttons visibility (Step 0, 1, 2, 3, 4 and 9 e bottom nav hide thakbe)
+  $("nav").style.display = (n < 5 || n === 9) ? "none" : "flex";
+  $("back").style.visibility = n===5 ? "hidden" : "visible";
   $("next").textContent = n===LAST_INPUT ? "Pathao 💌" : "Porer ta";
   $("err").textContent = "";
   
-  if(n === 3) {
+  if(n === 4) {
     startGame();
   }
 }
 show(0);
 
-function nextQuiz(targetStep) {
+function nextStep(targetStep) {
   burst(50);
   show(targetStep);
 }
+
+/* Fleeing No Buttons Logic */
+const no1 = $("no1");
+const no2 = $("no2");
+let tries1 = 0, tries2 = 0;
+
+function fleeNo(noBtn, e, isFirst) {
+  if(e && e.cancelable) e.preventDefault();
+  let tries = isFirst ? tries1 : tries2;
+  tries++;
+  if(isFirst) tries1 = tries; else tries2 = tries;
+
+  noBtn.textContent = CONFIG.noTexts[Math.min(tries, CONFIG.noTexts.length-1)];
+  if(tries >= 10){
+    noBtn.textContent = "Ha, jabo! 🥰";
+    noBtn.style.left="50%"; noBtn.style.top="85%";
+    noBtn.onclick = () => nextStep(isFirst ? 1 : 2);
+    noBtn.style.borderColor="var(--gold)"; noBtn.style.color="var(--gold)";
+    return;
+  }
+  const w=noBtn.offsetWidth, h=noBtn.offsetHeight, m=14;
+  noBtn.style.left=(m+w/2+Math.random()*(innerWidth-w-2*m))+"px";
+  noBtn.style.top =(m+h/2+Math.random()*(innerHeight-h-2*m))+"px";
+}
+
+// Initial positioning for fleeing buttons
+function initNoPos() {
+  setTimeout(()=>{
+    const r1 = document.querySelector('[data-s="0"] .yes-btn').getBoundingClientRect();
+    no1.style.left = (r1.left + r1.width + 40) + "px";
+    no1.style.top = (r1.top + 5) + "px";
+
+    const r2 = document.querySelector('[data-s="1"] .yes-btn').getBoundingClientRect();
+    no2.style.left = (r2.left + r2.width + 40) + "px";
+    no2.style.top = (r2.top + 5) + "px";
+  }, 100);
+}
+window.addEventListener("load", initNoPos);
+window.addEventListener("resize", initNoPos);
+
+document.addEventListener("pointermove", e=>{
+  if(cur === 0 && tries1 < 10) {
+    const r = no1.getBoundingClientRect();
+    if(Math.hypot(e.clientX-(r.left+r.width/2), e.clientY-(r.top+r.height/2)) < 90) fleeNo(no1, e, true);
+  }
+  if(cur === 1 && tries2 < 10) {
+    const r = no2.getBoundingClientRect();
+    if(Math.hypot(e.clientX-(r.left+r.width/2), e.clientY-(r.top+r.height/2)) < 90) fleeNo(no2, e, false);
+  }
+});
+
+["pointerdown","touchstart","click"].forEach(ev=>{
+  no1.addEventListener(ev, e => { if(tries1<10) fleeNo(no1, e, true); }, {passive:false});
+  no2.addEventListener(ev, e => { if(tries2<10) fleeNo(no2, e, false); }, {passive:false});
+});
+
 
 /* Mini Game Logic */
 let gameTimer = null, score = 0;
@@ -230,11 +322,11 @@ function startGame(){
   clearInterval(gameTimer);
 
   gameTimer = setInterval(()=>{
-    if(cur !== 3){ clearInterval(gameTimer); return; }
+    if(cur !== 4){ clearInterval(gameTimer); return; }
     const item = document.createElement("div");
     item.className = "falling-item";
-    const isBomb = Math.random() < 0.22; // 22% chance bomb ashar
-    item.textContent = isBomb ? "💣" : (Math.random() < 0.5 ? "💖" : "💝");
+    const isBomb = Math.random() < 0.22;
+    item.textContent = isBomb ? "💣" : (Math.random() < 0.5 ? "💖" : "🧸");
     item.style.left = (10 + Math.random() * 80) + "%";
     item.style.top = "-40px";
     area.appendChild(item);
@@ -242,7 +334,7 @@ function startGame(){
     let y = -40;
     const speed = 2.2 + Math.random() * 2.2;
     const fall = setInterval(()=>{
-      if(cur !== 3){ clearInterval(fall); item.remove(); return; }
+      if(cur !== 4){ clearInterval(fall); item.remove(); return; }
       y += speed;
       item.style.top = y + "px";
       if(y > 300){ clearInterval(fall); item.remove(); }
@@ -264,7 +356,7 @@ function startGame(){
         clearInterval(gameTimer);
         area.innerHTML = "<div style='padding-top:110px;font-size:1.4rem;color:var(--gold);font-weight:700'>🎉 Wah! Jite gecho! Ebar date plan kori...</div>";
         burst(140);
-        setTimeout(()=> show(4), 1300);
+        setTimeout(()=> show(5), 1300);
       }
     };
     item.addEventListener("pointerdown", hit);
@@ -291,32 +383,6 @@ function chips(key, list){
 chips("place", CONFIG.places);
 chips("food", CONFIG.foods);
 
-/* "Na" button: dhora jabe na */
-const no = $("no");
-let tries = 0, last = 0;
-function flee(e){
-  if(cur!==0) return;
-  if(e && e.cancelable) e.preventDefault();
-  const now = Date.now(); if(now-last<180) return; last = now; tries++;
-  no.textContent = CONFIG.noTexts[Math.min(tries, CONFIG.noTexts.length-1)];
-  if(tries>=10){
-    no.textContent = "Ha, jabo! 🥰";
-    no.style.left="50%"; no.style.top="85%";
-    no.onclick = yes; no.style.borderColor="var(--gold)"; no.style.color="var(--gold)";
-    return;
-  }
-  const w=no.offsetWidth,h=no.offsetHeight,m=14;
-  no.style.left=(m+w/2+Math.random()*(innerWidth-w-2*m))+"px";
-  no.style.top =(m+h/2+Math.random()*(innerHeight-h-2*m))+"px";
-  $("yes").style.transform="scale("+Math.min(1.35,1+tries*0.035)+")";
-}
-document.addEventListener("pointermove", e=>{
-  if(cur!==0 || tries>=10) return;
-  const r=no.getBoundingClientRect();
-  if(Math.hypot(e.clientX-(r.left+r.width/2), e.clientY-(r.top+r.height/2))<90) flee(e);
-});
-["pointerdown","touchstart","click"].forEach(ev=>no.addEventListener(ev,e=>{ if(tries<10) flee(e); },{passive:false}));
-
 /* confetti */
 const cv=$("c"), ctx=cv.getContext("2d"); let bits=[], raf=null;
 function size(){cv.width=innerWidth;cv.height=innerHeight}
@@ -328,23 +394,18 @@ function burst(n){
 }
 function loop(){
   ctx.clearRect(0,0,cv.width,cv.height);
-  bits.forEach(b=>{b.vy+=.25;b.x+=b.vx;b.y+=b.vy;b.r+=.1;ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.r);ctx.fillStyle=b.c;ctx.font=b.s*2+"px serif";ctx.fillText("♥",0,0);ctx.restore();});
+  bits.forEach(b=>{b.vy+=.25;b.x+=b.vx;b.y+=b.vy;b.r+=.1;ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.r);ctx.fillStyle=b.c;ctx.font=b.s*2+"px serif";ctx.fillText("🧸",0,0);ctx.restore();});
   bits=bits.filter(b=>b.y<cv.height+40);
   raf=bits.length?requestAnimationFrame(loop):null;
 }
 
-function yes(){
-  burst(100);
-  show(1); // Quiz Q1 এ যাবে
-}
-$("yes").onclick = yes;
 $("back").onclick = ()=> show(cur-1);
 
 $("next").onclick = async ()=>{
   const place = picked.place.concat($("placeOther").value.trim()||[]).join(", ");
   const food  = picked.food.concat($("foodOther").value.trim()||[]).join(", ");
-  if(cur===4 && !$("date").value){ $("err").textContent="Age tarikh ta bachho 📅"; return; }
-  if(cur===5 && !place){ $("err").textContent="Kothay jabe seta bachho 📍"; return; }
+  if(cur===5 && !$("date").value){ $("err").textContent="Age tarikh ta bachho 📅"; return; }
+  if(cur===6 && !place){ $("err").textContent="Kothay jabe seta bachho 📍"; return; }
   if(cur<LAST_INPUT){ show(cur+1); return; }
 
   const message =
@@ -361,7 +422,7 @@ $("next").onclick = async ()=>{
     });
     const j = await r.json();
     if(!j.success) throw new Error(j.message||"failed");
-    burst(160); show(8);
+    burst(160); show(9);
   }catch(e){
     $("err").textContent="Pathano gelo na 😕 Karon: "+(e&&e.message?e.message:"internet/network");
     $("next").disabled=false; $("next").textContent="Pathao 💌";
