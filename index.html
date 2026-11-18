@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ekta date hobe? 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1b3d;--bg2:#1d2f6b;--card:#182654;--gold:#ffd37a;--rose:#ff7a9a;--text:#fff7ea}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(ellipse at 50% 0%,var(--bg2),var(--bg) 70%) fixed;color:var(--text);font-family:"Hind Siliguri",system-ui,sans-serif;text-align:center;padding:24px 16px 50px;touch-action:manipulation}
+main{max-width:460px;margin:0 auto;min-height:80vh;display:flex;flex-direction:column;justify-content:center}
+h1{font-family:Pacifico,cursive;font-weight:400;font-size:clamp(1.6rem,7vw,2.4rem);color:var(--gold);margin:12px 0;line-height:1.5}
+p{line-height:1.6;margin:6px auto;font-size:1.05rem}
+.dots{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#3b4e92}
+.dots i.on{background:var(--gold)}
+.step{display:none;animation:in .4s}
+.step.show{display:block}
+@keyframes in{from{opacity:0}to{opacity:1}}
+.card{background:var(--card);border-radius:18px;padding:18px;margin:16px 0;text-align:left}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid #3b4e92;background:transparent;color:var(--text);border-radius:999px;padding:9px 15px;font:inherit;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--rose);border-color:var(--rose);color:#3a0f26;font-weight:700}
+input,textarea,select{width:100%;font:inherit;color:var(--text);background:#0f1b3d;border:2px solid #3b4e92;border-radius:12px;padding:11px;margin-top:10px}
+input[type=date]{color-scheme:dark}
+.chip:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button.b{font:inherit;font-weight:700;border:0;border-radius:14px;padding:15px 26px;font-size:1.1rem;cursor:pointer}
+.main{background:var(--gold);color:#2b1b00}
+.main:disabled{opacity:.6}
+.ghost{background:transparent;color:var(--text);border:2px solid #3b4e92!important}
+.nav{display:flex;gap:10px;justify-content:center;margin-top:8px}
+.nav .main{flex:1}
+.err{color:var(--rose);min-height:1.5em;margin:8px 0}
+#yes{font-size:1.25rem;padding:18px 40px;margin-top:26px;transition:transform .2s}
+#no{background:transparent;color:var(--text);border:2px solid var(--rose)!important;position:fixed;left:62%;top:72%;transform:translate(-50%,-50%);transition:left .22s,top .22s;z-index:5}
+.big{font-size:4.5rem;margin:10px 0}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
+</style>
+</head>
+<body>
+<main>
+  <div class="dots" id="dots" aria-hidden="true"></div>
 
+  <!-- 1: Jabe to? -->
+  <section class="step" data-s="0">
+    <div class="big">💌</div>
+    <h1 id="ask"></h1>
+    <p id="sub"></p>
+    <button class="b main" id="yes">Ha, jabo! 🥰</button>
+  </section>
+  <button class="b" id="no" style="display:none">Na</button>
+
+  <!-- 2: Kobe -->
+  <section class="step" data-s="1">
+    <h1>Kobe jabe? 📅</h1>
+    <div class="card">
+      <input type="date" id="date" aria-label="Tarikh">
+      <select id="time" aria-label="Somoy">
+        <option>Sokal</option><option>Dupur</option><option selected>Bikel</option><option>Shondha</option><option>Raat</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- 3: Kothay -->
+  <section class="step" data-s="2">
+    <h1>Kothay jabe? 📍</h1>
+    <div class="card">
+      <div class="chips" data-key="place" data-multi="0"></div>
+      <input id="placeOther" placeholder="Onno kothao? Ekhane lekho">
+    </div>
+  </section>
+
+  <!-- 4: Ki khabe -->
+  <section class="step" data-s="3">
+    <h1>Ki khabe? 🍕</h1>
+    <p>Ekadhik bachte paro</p>
+    <div class="card">
+      <div class="chips" data-key="food" data-multi="1"></div>
+      <input id="foodOther" placeholder="Onno kichu? Ekhane lekho">
+    </div>
+  </section>
+
+  <!-- 5: Ar kichu -->
+  <section class="step" data-s="4">
+    <h1>Ar kichu bolbe? 💭</h1>
+    <div class="card"><textarea id="extra" rows="4" placeholder="Jekono kichu…"></textarea></div>
+  </section>
+
+  <!-- 6: Sesh -->
+  <section class="step" data-s="5">
+    <div class="big">🎉</div>
+    <h1 id="thanks"></h1>
+    <p id="thanks2"></p>
+  </section>
+
+  <div class="err" id="err" role="alert"></div>
+  <div class="nav" id="nav">
+    <button class="b ghost" id="back">Ager ta</button>
+    <button class="b main" id="next">Porer ta</button>
+  </div>
+</main>
+<canvas id="c"></canvas>
+
+<script>
+/* ====== ✏️ EKHANE NIJER MOTO LEKHO ====== */
+const CONFIG = {
+  ask: "Amar sathe ekta date e jabe? 💞",
+  sub: "Ekdom sotti kore bolo! 🥺",
+  accessKey: "de58826d-c494-4b44-a773-cf82da78f46d",
+  places: ["Cafe ☕","Restaurant 🍽️","Park 🌳","Nodir par 🌊","Cinema 🎬","Shopping 🛍️"],
+  foods: ["Biryani","Pizza","Burger","Fuchka","Chinese","Kebab","Ice cream 🍦","Coffee","Dessert 🍰"],
+  noTexts: ["Na","Ei to, dhoro!","Parbe na 😜","Hehe 😏","Aro kache ay 🏃","Haar maano 🙈","Thik ache, jabo 😳"],
+  thanks: "Pathiye diyechi! 🎉",
+  thanks2: "Ami dekhe nichchi. Ekhon ready hoye thako! 💕"
+};
+/* ======================================= */
+
+const $ = id => document.getElementById(id);
+$("ask").textContent = CONFIG.ask;
+$("sub").textContent = CONFIG.sub;
+$("thanks").textContent = CONFIG.thanks;
+$("thanks2").textContent = CONFIG.thanks2;
+$("date").min = new Date().toISOString().slice(0,10);
+
+const steps = [...document.querySelectorAll(".step")];
+const LAST_INPUT = 4;               // 4 = "Ar kichu" step, ekhane Pathao
+let cur = 0;
+steps.forEach((_,i)=>{ if(i<5){ const d=document.createElement("i"); $("dots").appendChild(d);} });
+
+function show(n){
+  cur = n;
+  steps.forEach((s,i)=>s.classList.toggle("show", i===n));
+  [...$("dots").children].forEach((d,i)=>d.classList.toggle("on", i<=n));
+  $("no").style.display = n===0 ? "block" : "none";
+  $("nav").style.display = (n===0 || n===5) ? "none" : "flex";
+  $("back").style.visibility = n===1 ? "hidden" : "visible";
+  $("next").textContent = n===LAST_INPUT ? "Pathao 💌" : "Porer ta";
+  $("err").textContent = "";
+}
+show(0);
+
+/* chips */
+const picked = {place:[], food:[]};
+function chips(key, list){
+  const box = document.querySelector('[data-key="'+key+'"]');
+  const multi = box.dataset.multi === "1";
+  list.forEach(t=>{
+    const b = document.createElement("button");
+    b.type="button"; b.className="chip"; b.textContent=t; b.setAttribute("aria-pressed","false");
+    b.onclick = ()=>{
+      const on = b.getAttribute("aria-pressed") !== "true";
+      if(!multi){ box.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false")); picked[key]=[]; }
+      b.setAttribute("aria-pressed", on);
+      if(on) picked[key].push(t); else picked[key]=picked[key].filter(x=>x!==t);
+    };
+    box.appendChild(b);
+  });
+}
+chips("place", CONFIG.places);
+chips("food", CONFIG.foods);
+
+/* "Na" button: dhora jabe na */
+const no = $("no");
+let tries = 0, last = 0;
+function flee(e){
+  if(cur!==0) return;
+  if(e && e.cancelable) e.preventDefault();
+  const now = Date.now(); if(now-last<180) return; last = now; tries++;
+  no.textContent = CONFIG.noTexts[Math.min(tries, CONFIG.noTexts.length-1)];
+  if(tries>=10){                        // onek chesta -> nijei "Ha" hoye jay
+    no.textContent = "Ha, jabo! 🥰";
+    no.style.left="50%"; no.style.top="82%";
+    no.onclick = yes; no.style.borderColor="var(--gold)"; no.style.color="var(--gold)";
+    return;
+  }
+  const w=no.offsetWidth,h=no.offsetHeight,m=14;
+  no.style.left=(m+w/2+Math.random()*(innerWidth-w-2*m))+"px";
+  no.style.top =(m+h/2+Math.random()*(innerHeight-h-2*m))+"px";
+  $("yes").style.transform="scale("+Math.min(1.35,1+tries*0.035)+")";
+}
+document.addEventListener("pointermove", e=>{
+  if(cur!==0 || tries>=10) return;
+  const r=no.getBoundingClientRect();
+  if(Math.hypot(e.clientX-(r.left+r.width/2), e.clientY-(r.top+r.height/2))<90) flee(e);
+});
+["pointerdown","touchstart","click"].forEach(ev=>no.addEventListener(ev,e=>{ if(tries<10) flee(e); },{passive:false}));
+
+/* confetti */
+const cv=$("c"), ctx=cv.getContext("2d"); let bits=[], raf=null;
+function size(){cv.width=innerWidth;cv.height=innerHeight}
+addEventListener("resize",size); size();
+function burst(n){
+  const cols=["#ff7a9a","#ffd37a","#fff7ea","#9fb4ff"];
+  for(let i=0;i<n;i++) bits.push({x:cv.width/2,y:cv.height*.4,vx:(Math.random()-.5)*14,vy:Math.random()*-13-2,s:Math.random()*6+9,r:Math.random()*6,c:cols[i%4]});
+  if(!raf) loop();
+}
+function loop(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  bits.forEach(b=>{b.vy+=.25;b.x+=b.vx;b.y+=b.vy;b.r+=.1;ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.r);ctx.fillStyle=b.c;ctx.font=b.s*2+"px serif";ctx.fillText("♥",0,0);ctx.restore();});
+  bits=bits.filter(b=>b.y<cv.height+40);
+  raf=bits.length?requestAnimationFrame(loop):null;
+}
+
+function yes(){ burst(120); show(1); }
+$("yes").onclick = yes;
+$("back").onclick = ()=> show(cur-1);
+
+$("next").onclick = async ()=>{
+  const place = picked.place.concat($("placeOther").value.trim()||[]).join(", ");
+  const food  = picked.food.concat($("foodOther").value.trim()||[]).join(", ");
+  if(cur===1 && !$("date").value){ $("err").textContent="Age tarikh ta bachho 📅"; return; }
+  if(cur===2 && !place){ $("err").textContent="Kothay jabe seta bachho 📍"; return; }
+  if(cur<LAST_INPUT){ show(cur+1); return; }
+
+  const message =
+    "📅 Kobe: "+$("date").value+" ("+$("time").value+")\n"+
+    "📍 Kothay: "+place+"\n"+
+    "🍕 Ki khabe: "+(food||"kichu bole ni")+"\n"+
+    "💭 Ar kichu: "+($("extra").value.trim()||"—");
+  $("next").disabled=true; $("next").textContent="Pathachchi…";
+  try{
+    const r = await fetch("https://api.web3forms.com/submit",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({access_key:CONFIG.accessKey,subject:"💌 Date er answer ashche!",from_name:"Date Invite",message})
+    });
+    const j = await r.json();
+    if(!j.success) throw new Error(j.message||"failed");
+    burst(160); show(5);
+  }catch(e){
+    $("err").textContent="Pathano gelo na 😕 Karon: "+(e&&e.message?e.message:"internet/network");
+    $("next").disabled=false; $("next").textContent="Pathao 💌";
+  }
+};
+</script>
+</body>
+  </html>
